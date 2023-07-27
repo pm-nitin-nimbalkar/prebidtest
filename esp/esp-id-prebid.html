@@ -3,8 +3,30 @@
 <head>
     <link rel="icon" type="image/png" href="/favicon.png">
     <script async src="//www.googletagservices.com/tag/js/gpt.js"></script>
+
+    <script type="text/javascript">
+        // Handling for Promise in IE
+        (function() {
+            if (typeof Promise !== "function") {
+                var es6 = document.createElement('script');
+                es6.type = 'text/javascript';
+                es6.src = 'https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js';
+                var es6auto = document.createElement('script');
+                es6auto.type = 'text/javascript';
+                es6auto.src = 'https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js';
+                var node = document.getElementsByTagName('script')[0];
+                node.parentNode.insertBefore(es6, node);
+                node.parentNode.insertBefore(es6auto, node);
+            }
+        })();
+    </script>
+    <!-- End IE Compatibility Script for ESP (Promise) -->
     <script async src="prebid.js"></script>
 
+    <!-- ESP Script -->
+    <!-- <script async src="eids-esp.1.1.js" ></script> -->
+    <script async src="esp.min.js" ></script>
+    
     <script>
         var div_1_sizes = [
             [300, 250],
@@ -93,14 +115,7 @@
                         "sources": [{
                             source: ['sharedid.org', 'criteo.com', 'pubcid.org', 'audigent.com'],
                             encrypt: false
-                        }, {
-                            source: ['pubmatic.com'],
-                            //Custom sources can be identified if customFunc is defined
-                            customFunc: () => {
-                                return '{"keywords":["tech","auto"]}';
-                            },
-                            encrypt: true
-                        }, {
+                        },{
                             source: ['segment.com'],
                             customFunc: () => {
                                 return '[{ "id": "1", "value": "seg1" },{ "id": "2", "value": "seg2" }]';
@@ -117,9 +132,6 @@
                 timeout: PREBID_TIMEOUT
             });
         });
-
-
-
 
         function initAdserver() {
             if (pbjs.initAdserverSet) return;
