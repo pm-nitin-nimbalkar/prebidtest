@@ -69,12 +69,16 @@ function OptanonWrapper() { }
     pbjs.que.push(function () {
       pbjs.setConfig({
         consentManagement: {
-          gdpr: {
+          // gdpr: {
+          //   cmpApi: 'iab',
+          //   allowAuctionWithoutConsent: true, // suppress auctions if there's no GDPR consent string
+          //   timeout: 3000,  // GDPR timeout 3000ms
+          //   defaultGdprScope: true
+          // }
+          usp: {
             cmpApi: 'iab',
-            allowAuctionWithoutConsent: true, // suppress auctions if there's no GDPR consent string
-            timeout: 3000,  // GDPR timeout 3000ms
-            defaultGdprScope: true
-          }
+            timeout: 100 // US Privacy timeout 100ms
+           }
         }
       });
     });
