@@ -1,0 +1,231 @@
+<!--
+
+  This page calls a single bidder for a single ad slot. It can be considered a "hello world" example for using
+  Prebid with the Google Publisher Tag.
+
+  It also makes a good test page for new adapter PR submissions. Simply set your server's Bid Params object in the
+  bids array inside the adUnits, and it will use your adapter to load an ad.
+
+  NOTE that many ad servers won't send back an ad if the URL is localhost... so you might need to
+  set an alias in your /etc/hosts file so that you can load this page from a different domain.
+
+-->
+
+<html>
+
+<head>
+
+  <script>
+    var PREBID_TIMEOUT = 2700;
+
+    var adUnits = [
+      {
+        code: 'Div1',
+        mediaTypes: {
+          banner: {
+            sizes: [[300, 250], [728, 90], [160, 600]]
+          }
+        },
+        bids: [
+          {
+            bidder: 'pubmatic',
+            params: {
+              publisherId: '5890',
+              adSlot: '/43743431/DMDemo@728x90:0',
+              pmzoneid: 'zone1',
+              kadpageurl: 'www.yahoo.com',
+              lat: '40.712775',
+              lon: '-74.005973',
+              yob: '1982',
+              kadpageurl: 'www.yahoo.com',
+              gender: 'M',
+              kadfloor: '1.75',
+              bcat: ['IAB1-1', 'IAB1-2']
+            }
+          }
+        ]
+      }
+    ];
+
+
+    var pbjs = pbjs || {};
+    pbjs.que = pbjs.que || [];
+
+
+
+    // var ihowpbjs = window.ihowpbjs || {};
+    // ihowpbjs.que = ihowpbjs.que || [];
+    pbjs.que.push(function () {
+      pbjs.setConfig({
+        consentManagement: {
+          gdpr: {
+            cmpApi: 'iab',
+            allowAuctionWithoutConsent: true, // suppress auctions if there's no GDPR consent string
+            timeout: 3000,  // GDPR timeout 3000ms
+            defaultGdprScope: true
+          }
+        }
+      });
+    });
+
+  </script>
+
+  <script type="text/javascript">
+    (function () {
+      var purl = window.location.href;
+      var url = '//ads.pubmatic.com/AdServer/js/pwt/5890';
+      var profileId = '0';
+      var profileVersionId = '';
+
+      if (purl.indexOf('profile=') > 0) {
+        var regexp = /profile=(.*?)(&|$)/g;
+        var matches = regexp.exec(purl);
+        if (matches.length >= 2 && matches[1].length > 0) {
+          profile = matches[1];
+        }
+      }
+      if (purl.indexOf('pwtv=') > 0) {
+        var regexp = /pwtv=(.*?)(&|$)/g;
+        var matches = regexp.exec(purl);
+        if (matches.length >= 2 && matches[1].length > 0) {
+          profileVersionId = '/' + matches[1];
+        }
+      }
+      if (purl.indexOf('project=') > 0) {
+        var regexp = /project=(.*?)(&|$)/g;
+        var matches = regexp.exec(purl);
+        if (matches.length >= 2 && matches[1].length > 0) {
+          project = matches[1];
+        }
+      }
+      if (purl.indexOf('profileId=') > 0) {
+        var regexp = /profileId=(.*?)(&|$)/g;
+        var matches = regexp.exec(purl);
+        if (matches.length >= 2 && matches[1].length > 0) {
+          profileId = '/' + matches[1];
+        }
+      }
+      var wtads = document.createElement('script');
+      wtads.async = true;
+      wtads.type = 'text/javascript';
+      // if (profileId !== '0') {
+      //   
+      // } else {
+      //   wtads.src = 'owt.'+profile+"."+project+".js";
+      // }
+      //wtads.src = 'https://ads.pubmatic.com/AdServer/js/pwt/5890/10106/5/pwt.js';
+      wtads.src= url + profileId + profileVersionId + '/pwt.js';
+      var node = document.getElementsByTagName('script')[0];
+      node.parentNode.insertBefore(wtads, node);
+    })();
+  </script>
+
+
+  <script type='text/javascript'>
+    (function () {
+      setTimeout(function () {
+        var prebidjs = document.createElement('script');
+        prebidjs.async = true;
+        prebidjs.type = 'text/javascript';
+        var useSSL = 'https:' == document.location.protocol;
+        //prebidjs.src = "prebid-"+project+".js";
+        prebidjs.src = "prebid7.39.0.js";
+        var node = document.getElementsByTagName('script')[0];
+        node.parentNode.insertBefore(prebidjs, node);
+      }, 2000);
+    })();
+  </script>
+
+  <script>
+    var googletag = googletag || {};
+    googletag.cmd = googletag.cmd || [];
+    googletag.cmd.push(function () {
+      googletag.pubads().disableInitialLoad();
+    });
+
+    pbjs.que.push(function () {
+      pbjs.setConfig({
+        debug: true,
+        userSync: {
+          filterSettings: { iframe: { bidders: '*', filter: 'include' } },
+          userIds: [{
+            name: "connectId",
+            params: {
+              pixelId: 8976,
+              he: "ed8ddbf5a171981db8ef938596ca297d5e3f84bcc280041c5880dba3baf9c1d4"
+            },
+            storage: {
+              type: "html5",
+              name: "connectId",
+              expires: 15
+            }
+          }],
+          syncDelay: 3000,
+        }
+      });
+      pbjs.addAdUnits(adUnits);
+      pbjs.requestBids({
+        bidsBackHandler: sendAdserverRequest
+      });
+
+    });
+
+    function sendAdserverRequest() {
+      if (pbjs.adserverRequestSent) return;
+      pbjs.adserverRequestSent = true;
+      googletag.cmd.push(function () {
+        pbjs.que.push(function () {
+          pbjs.setTargetingForGPTAsync();
+          googletag.pubads().refresh();
+        });
+      });
+    }
+
+    setTimeout(function () {
+      sendAdserverRequest();
+    }, PREBID_TIMEOUT);
+
+  </script>
+
+  <script type='text/javascript'>
+    var googletag = googletag || {};
+    googletag.cmd = googletag.cmd || [];
+    (function () {
+      setTimeout(function () {
+        var gads = document.createElement('script');
+        gads.async = true;
+        gads.type = 'text/javascript';
+        var useSSL = 'https:' == document.location.protocol;
+        gads.src = (useSSL ? 'https:' : 'https:') +
+          '//securepubads.g.doubleclick.net/tag/js/gpt.js';
+        var node = document.getElementsByTagName('script')[0];
+        node.parentNode.insertBefore(gads, node);
+      }, 250); // Adding 250ms delay to gpt.js for PubMatic script to load
+    })();
+  </script>
+
+  <script>
+    googletag.cmd.push(function () {
+      googletag.defineSlot('/43743431/DMDemo', [[300, 250], [728, 90], [160, 600]], 'Div1').addService(googletag.pubads());
+      googletag.pubads().setTargeting('safeframeautomation', '1');
+      googletag.pubads().enableSingleRequest();
+      googletag.enableServices();
+    });
+  </script>
+</head>
+
+<body>
+  <h2>Prebid.js Test</h2>
+  <h5>Div-1</h5>
+  <div id='Div1'>
+    <script type='text/javascript'>
+      googletag.cmd.push(function () {
+        googletag.display('Div1');
+      });
+    </script>
+  </div>
+
+
+
+</body>
+</html>
