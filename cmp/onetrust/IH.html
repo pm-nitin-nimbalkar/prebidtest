@@ -64,24 +64,24 @@ function OptanonWrapper() { }
 
 
 
-    // var ihowpbjs = window.ihowpbjs || {};
-    // ihowpbjs.que = ihowpbjs.que || [];
-    pbjs.que.push(function () {
-      pbjs.setConfig({
-        consentManagement: {
-          // gdpr: {
-          //   cmpApi: 'iab',
-          //   allowAuctionWithoutConsent: true, // suppress auctions if there's no GDPR consent string
-          //   timeout: 3000,  // GDPR timeout 3000ms
-          //   defaultGdprScope: true
-          // }
-          usp: {
-            cmpApi: 'iab',
-            timeout: 1000 // US Privacy timeout 100ms
-           }
-        }
-      });
-    });
+    // // var ihowpbjs = window.ihowpbjs || {};
+    // // ihowpbjs.que = ihowpbjs.que || [];
+    // pbjs.que.push(function () {
+    //   pbjs.setConfig({
+    //     consentManagement: {
+    //       // gdpr: {
+    //       //   cmpApi: 'iab',
+    //       //   allowAuctionWithoutConsent: true, // suppress auctions if there's no GDPR consent string
+    //       //   timeout: 3000,  // GDPR timeout 3000ms
+    //       //   defaultGdprScope: true
+    //       // }
+    //       usp: {
+    //         cmpApi: 'iab',
+    //         timeout: 1000 // US Privacy timeout 100ms
+    //        }
+    //     }
+    //   });
+    // });
 
   </script>
 
@@ -176,6 +176,18 @@ function OptanonWrapper() { }
             }
           }],
           syncDelay: 3000,
+        },
+        consentManagement: {
+          // gdpr: {
+          //   cmpApi: 'iab',
+          //   allowAuctionWithoutConsent: true, // suppress auctions if there's no GDPR consent string
+          //   timeout: 3000,  // GDPR timeout 3000ms
+          //   defaultGdprScope: true
+          // }
+          usp: {
+            cmpApi: 'iab',
+            timeout: 1000 // US Privacy timeout 100ms
+           }
         }
       });
       pbjs.addAdUnits(adUnits);
