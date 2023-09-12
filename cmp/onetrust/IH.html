@@ -185,9 +185,13 @@ function OptanonWrapper() { }
           //   defaultGdprScope: true
           // }
           usp: {
-            cmpApi: 'iab',
-            timeout: 1000 // US Privacy timeout 100ms
-           }
+              cmpApi: 'static',
+              consentData: {
+                getUSPData: {
+                  uspString: '1---'
+                }
+              }
+            }
         }
       });
       pbjs.addAdUnits(adUnits);
